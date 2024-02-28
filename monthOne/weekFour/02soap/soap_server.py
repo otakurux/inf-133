@@ -4,10 +4,10 @@ from pysimplesoap.server import SoapDispatcher, SOAPHandler
 def greet(name):
     return "¡Hello, {}!".format(name)
 
-def sum(num1, num2):
+def SumaDosNumeros(num1, num2):
     return num1 + num2
     
-def is_palindrome(word):
+def CadenaPalindromo(word):
     word = word.lower().replace(" ", "")
     return word == word[::-1]
 
@@ -28,18 +28,18 @@ dispatcher.register_function(
 )
 
 dispatcher.register_function(
-    "sum",
-    sum,
-    returns={"sum": int},
+    "SumaDosNumeros",
+    SumaDosNumeros,
+    returns={"SumaDosNumeros": int},
     args={"num1": int,
           "num2": int
           },
 )
 
 dispatcher.register_function(
-    "is_palindrome",
-    is_palindrome,
-    returns={"is_palindrome": bool},
+    "CadenaPalindromo",
+    CadenaPalindromo,
+    returns={"CadenaPalindromo": bool},
     args={"word": str},
 )
 
