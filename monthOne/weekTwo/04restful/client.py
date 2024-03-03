@@ -4,6 +4,7 @@ import json
 
 url = "http://localhost:8000/"
 
+
 print()
 def get_carrera():
     route_carrera = url + "carreras"
@@ -33,6 +34,7 @@ def add_estudiante(nombre, apellido, carrera):
     
 print(add_estudiante("Juan", "Lopez", "Economia"))
 print(add_estudiante("Paolo", "Arias", "Economia"))
+
 
 print()
 def get_estudiantes_economia():
