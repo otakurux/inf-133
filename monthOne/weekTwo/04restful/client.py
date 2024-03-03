@@ -1,66 +1,49 @@
 import requests
+import json
 
-# Consultando a un servidor RESTful
+
 url = "http://localhost:8000/"
-# GET obtener a todos los estudiantes por la ruta /estudiantes
-ruta_get = url + "estudiantes"
-get_response = requests.request(method="GET", url=ruta_get)
-print(get_response.text)
-# POST agrega un nuevo estudiante por la ruta /estudiantes
-ruta_post = url + "estudiantes"
-nuevo_estudiante = {
-    "nombre": "Juanito",
-    "apellido": "Pérez",
-    "carrera": "Ingeniería Agronomica",
-}
 
-post_response = requests.request(method="POST", url=ruta_post, json=nuevo_estudiante)
-print(post_response.text)
+print()
+def get_carrera():
+    route_carrera = url + "carreras"
+    response = requests.get(route_carrera)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return response.text
 
-# DELETE elimina todos los estudiantes por la ruta /estudiantes
-ruta_eliminar = url + "estudiantes"
-eliminar_response = requests.request(method="DELETE", 
-                                    url=ruta_eliminar)
-print(eliminar_response.text)
+print(get_carrera())
 
-# POST agrega un nuevo estudiante por la ruta /estudiantes
-ruta_post = url + "estudiantes"
-nuevo_estudiante = {
-    "nombre": "Juanito",
-    "apellido": "Pérez",
-    "carrera": "Ingeniería Agronomica"
-}
 
-post_response = requests.request(method="POST", 
-                        url=ruta_post,
-                        json=nuevo_estudiante)
-print(post_response.text)
+print()
+def add_estudiante(nombre, apellido, carrera):
+    route_Economia = url + "estudiantes"
+    nuevo_estudiante = {
+        "nombre": nombre,
+        "apellido": apellido,
+        "carrera": carrera
+    }
+        
+    response = requests.post(route_Economia, json=nuevo_estudiante)
+    if response.status_code == 201:
+        return "Estudiante agregado exitosamente."
+    else:
+        return "Error:", response.text
+    
+print(add_estudiante("Juan", "Lopez", "Economia"))
+print(add_estudiante("Paolo", "Arias", "Economia"))
 
-nuevo_estudiante = {
-    "nombre": "Pedrito",
-    "apellido": "Lopez",
-    "carrera": "Ingeniería",
-}
-
-post_response = requests.request(method="POST", url=ruta_post, json=nuevo_estudiante)
-print(post_response.text)
-
-# GET busca a un estudiante por id /estudiantes/{id}
-ruta_filtrar_nombre = url + "estudiantes/1"
-filtrar_nombre_response = requests.request(method="GET", 
-                                url=ruta_filtrar_nombre)
-print(filtrar_nombre_response.text)
-
-# PUT actualiza un estudiante por la ruta /estudiantes
-ruta_actualizar = url + "estudiantes"
-estudiante_actualizado = {
-    "id": 1,
-    "nombre": "Juan",
-    "apellido": "Pérez",
-    "carrera": "Ingeniería Agronomica",
-}
-put_response = requests.request(
-    method="PUT", url=ruta_actualizar, 
-    json=estudiante_actualizado
-)
-print(put_response.text)
+print()
+def get_estudiantes_economia():
+    url = "http://localhost:8000/Economia"    
+    response = requests.get(url)
+    if response.status_code == 200:
+        estudiantes_economia = response.json()
+        print("Estudiantes de Economia:")
+        for estudiante in estudiantes_economia:
+            print(f"- {estudiante['nombre']} {estudiante['apellido']}")
+    else:
+        print("Error:", response.text)
+        
+get_estudiantes_economia()

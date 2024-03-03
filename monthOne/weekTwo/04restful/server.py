@@ -11,7 +11,7 @@ estudiantes = [
     {
         "id": 2,
         "nombre": "Pedrito",
-        "apellido": "García",
+        "apellido": "Garcia",
         "carrera": "Ingeniería de Sistemas",
     },
     {
@@ -47,7 +47,23 @@ class RESTRequestHandler(BaseHTTPRequestHandler):
                 self.send_header("Content-type", "application/json")
                 self.end_headers()
                 self.wfile.write(json.dumps(estudiante).encode("utf-8"))
+        
+        elif self.path == "/carreras":
+            carrera = list({estudiante["carrera"] for estudiante in estudiantes})
 
+            self.send_response(200)
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps(carrera).encode("utf-8"))
+
+        elif self.path == "/Economia":
+            estudiantes_economia = [estudiante for estudiante in estudiantes if estudiante["carrera"] == "Economia"]
+            
+            self.send_response(200)
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps(estudiantes_economia).encode("utf-8"))
+            
         else:
             self.send_response(404)
             self.send_header("Content-type", "application/json")
@@ -61,6 +77,7 @@ class RESTRequestHandler(BaseHTTPRequestHandler):
             post_data = json.loads(post_data.decode("utf-8"))
             post_data["id"] = len(estudiantes) + 1
             estudiantes.append(post_data)
+            
             self.send_response(201)
             self.send_header("Content-type", "application/json")
             self.end_headers()
