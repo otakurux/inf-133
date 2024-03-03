@@ -38,8 +38,8 @@ print(add_estudiante("Paolo", "Arias", "Economia"))
 
 print()
 def get_estudiantes_economia():
-    url = "http://localhost:8000/Economia"    
-    response = requests.get(url)
+    route_Economia = url + "estudiantes"    
+    response = requests.get(route_Economia)
     if response.status_code == 200:
         estudiantes_economia = response.json()
         print("Estudiantes de Economia:")
