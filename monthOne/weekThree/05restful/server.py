@@ -32,7 +32,6 @@ estudiantes = [
 
 
 
-
 class RESTRequestHandler(BaseHTTPRequestHandler):
     def response_handler(self, status, data):    
         self.send_response(status)
@@ -41,6 +40,9 @@ class RESTRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(data).encode("utf-8"))
         
     def do_GET(self):
+        parsed_path = urlparse(self.path)
+        query_params = parse_qs(parsed_path.query)
+        
         if self.path == "/estudiantes":
             self.response_handler(200, estudiantes)
             
