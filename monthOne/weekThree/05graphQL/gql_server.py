@@ -12,21 +12,46 @@ class Estudiante(ObjectType):
 
 class Query(ObjectType):
     estudiantes = List(Estudiante)
-    estudiante = Field(Estudiante, id=Int())
+    estudiante_por_id = Field(Estudiante, id=Int())
+    estudiante_por_name_surname = Field(Estudiante, name=String(), surname=String())
+    estudiantes_arquitectura = List(estudiante)
 
     def resolve_estudiantes(root, info):
         return estudiantes
 
-    def resolve_estudiante(root, info, id):
+    def resolve_estudiante_por_id(root, info, id):
         for estudiante in estudiantes:
             if estudiante.id == id:
                 return estudiante
         return None
+    
+    def resolver_estudiante_por_name_surname(root, info, name, surname):
+        for estudiante in estudiantes:
+            if estudiante.nombre == name and estudiante.apellido == surname:
+                return estudiante
+        return none
+
+    def resolve_estudiante_arquitectura(root, info):
+        estudiantes_arquitectura = []
+        carrera = "arquitectura"
+        for estudiante in estudiantes:
+            if estudiante.carrera == carrera:
+                estudiante_arquitectura.append(estudiante)
+        return estudiantes_arquitectura
+
+
 
 estudiantes = [
     Estudiante(
-        id=1, nombre="Pedrito", apellido="García", carrera="Ingeniería de Sistemas"),
-    Estudiante(id=2, nombre="Jose", apellido="Lopez", carrera="Arquitectura"),
+        id=1,
+        nombre="Pedrito",
+        apellido="García",
+        carrera="Ingeniería de Sistemas"),
+    Estudiante(
+        id=2,
+        nombre="Jose",
+        apellido="Lopez",
+        carrera="Arquitectura"),
 ]
 
 schema = Schema(query=Query)
