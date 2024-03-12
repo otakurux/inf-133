@@ -10,11 +10,30 @@ class Estudiante(ObjectType):
     carrera = String()
 
 
+class CrearEstudiante(ObjectType):
+    estudiante = Field(Estudiante)
+
+    class Arguments:
+        nombre = String()
+        apellido = String()
+        carrera = String()
+
+    def mutate(root, info, nombre, apellido, carrera):
+        nuevo_estudiante = Estudiante(
+            id=len(estudiantes) + 1,
+            nombre=nombre,
+            apellido=apellido,
+            carrera=carrera
+        )
+        estudiantes.append(nuevo_estudiante)
+        return CrearEstudiante(estudiante=nuevo_estudiante)
+
+
 class Query(ObjectType):
     estudiantes = List(Estudiante)
     estudiante_por_id = Field(Estudiante, id=Int())
-    estudiante_por_name_surname = Field(Estudiante, name=String(), surname=String())
-    estudiantes_arquitectura = List(estudiante)
+    estudiante_por_nombre_apellido = Field(Estudiante, nombre=String(), apellido=String())
+    estudiantes_arquitectura = List(Estudiante)
 
     def resolve_estudiantes(root, info):
         return estudiantes
@@ -24,21 +43,19 @@ class Query(ObjectType):
             if estudiante.id == id:
                 return estudiante
         return None
-    
-    def resolver_estudiante_por_name_surname(root, info, name, surname):
+
+    def resolve_estudiante_por_nombre_apellido(root, info, nombre, apellido):
         for estudiante in estudiantes:
-            if estudiante.nombre == name and estudiante.apellido == surname:
+            if estudiante.nombre == nombre and estudiante.apellido == apellido:
                 return estudiante
-        return none
+        return None
 
-    def resolve_estudiante_arquitectura(root, info):
+    def resolve_estudiantes_arquitectura(root, info):
         estudiantes_arquitectura = []
-        carrera = "arquitectura"
         for estudiante in estudiantes:
-            if estudiante.carrera == carrera:
-                estudiante_arquitectura.append(estudiante)
+            if estudiante.carrera == "Arquitectura":
+                estudiantes_arquitectura.append(estudiante)
         return estudiantes_arquitectura
-
 
 
 estudiantes = [
@@ -46,15 +63,17 @@ estudiantes = [
         id=1,
         nombre="Pedrito",
         apellido="García",
-        carrera="Ingeniería de Sistemas"),
+        carrera="Ingeniería de Sistemas"
+    ),
     Estudiante(
         id=2,
         nombre="Jose",
         apellido="Lopez",
-        carrera="Arquitectura"),
+        carrera="Arquitectura"
+    ),
 ]
 
-schema = Schema(query=Query)
+schema = Schema(query=Query, mutation=CrearEstudiante)
 
 
 class GraphQLRequestHandler(BaseHTTPRequestHandler):

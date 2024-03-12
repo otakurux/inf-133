@@ -2,7 +2,14 @@ import requests
 
 query = """
     {
-        resolve_estudiante_arquitectura
+        crearEstudiante(nombre: "Angel", apellido: "Gomez", carrera: "Biologia"){
+            estudiante{
+                id
+                nombre
+                apellido
+                carrera
+            }
+        }
     }
 """
 
@@ -11,7 +18,3 @@ url = 'http://localhost:8000/graphql'
 response = requests.post(url, json={'query': query})
 print(response.text)
 
-
-        # estudiantePorNameSurname(name: "Jose" surname: "Lopez"){
-        #     nombre
-        # }
