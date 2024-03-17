@@ -56,5 +56,8 @@
         "Suma",
         "todos",
         "zeep"
-    ]
+    ],
+    "pythonIndent.keepHangingBracketOnLine": true,
+    "pythonIndent.trimLinesWithOnlyWhitespace": true,
+    "pythonIndent.useTabOnHangingIndent": true
 }

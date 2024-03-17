@@ -61,9 +61,16 @@ class Mutations(ObjectType):
 
 estudiantes = [
     Estudiante(
-        id=1, nombre="Pedrito", apellido="García", carrera="Ingeniería de Sistemas"
+        id=1,
+        nombre="Pedrito",
+        apellido="García",
+        carrera="Ingeniería de Sistemas"
     ),
-    Estudiante(id=2, nombre="Jose", apellido="Lopez", carrera="Arquitectura"),
+    Estudiante(
+        id=2,
+        nombre="Jose",
+        apellido="Lopez", 
+        carrera="Arquitectura"),
 ]
 
 schema = Schema(query=Query, mutation=Mutations)
