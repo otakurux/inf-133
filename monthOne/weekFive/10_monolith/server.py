@@ -5,7 +5,7 @@ from urllib.parse import urlparse, parse_qs
 db = {
     1: {
         "title": "Mi primer publication",
-        "content": "¡Hello word! Esta es mi primer publication en el blog.",
+        "content": "¡Hola mundo! Esta es mi primer publication en el blog.",
     },
     2: {
         "title": "Otra publication",
@@ -14,19 +14,49 @@ db = {
 }
 
 
+class BlogService:
+    def get_all_posts(self):
+        return list(db.values())
+
+    def get_post_by_id(self, post_id):
+        return db.get(post_id)
+
+    def create_post(self, title, content):
+        new_post_id = max(db.keys()) + 1
+        db[new_post_id] = {"title": title, "content": content}
+        return new_post_id
+
+    def update_post(self, post_id, title, content):
+        if post_id in db:
+            db[post_id]["title"] = title
+            db[post_id]["content"] = content
+            return True
+        else:
+            return False
+
+    def delete_post(self, post_id):
+        if post_id in db:
+            del db[post_id]
+            return True
+        else:
+            return False
+
+
 class BlogHandler(BaseHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        self.blog_service = BlogService()
+        super().__init__(*args, **kwargs)
+
     def do_GET(self):
-        
         self.send_response(200)
         self.send_header("Content-type", "application/json")
-        self.wfile.write(json.dumps(response).encode('utf-8'))
         self.end_headers()
 
         if self.path == "/posts":
-            self.wfile.write(json.dumps(list(db.values())).encode())
+            self.wfile.write(json.dumps(self.blog_service.get_all_posts()).encode())
         elif self.path.startswith("/post/"):
             post_id = int(self.path.split("/")[-1])
-            post = db.get(post_id)
+            post = self.blog_service.get_post_by_id(post_id)
             if post:
                 self.wfile.write(json.dumps(post).encode())
             else:
@@ -39,31 +69,27 @@ class BlogHandler(BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length)
         post_params = parse_qs(post_data.decode())
 
-        if self.path == "/posts":
-            title = post_params.get("title", [""])[0]
-            content = post_params.get("content", [""])[0]
-            new_post_id = max(db.keys()) + 1
-            db[new_post_id] = {"title": title, "content": content}
-            self.send_response(201)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            self.wfile.write(json.dumps({"id": new_post_id}).encode())
-        else:
-            self.send_error(404, "Ruta no valid")
+        title = post_params.get("title", [""])[0]
+        content = post_params.get("content", [""])[0]
+
+        new_post_id = self.blog_service.create_post(title, content)
+
+        self.send_response(201)
+        self.send_header("Content-type", "application/json")
+        self.end_headers()
+        self.wfile.write(json.dumps({"id": new_post_id}).encode())
 
     def do_PUT(self):
         if self.path.startswith("/post/"):
             post_id = int(self.path.split("/")[-1])
-            if post_id in db:
-                content_length = int(self.headers["Content-Length"])
-                post_data = self.rfile.read(content_length)
-                post_params = parse_qs(post_data.decode())
-                db[post_id]["title"] = post_params.get("title", [db[post_id]["title"]])[
-                    0
-                ]
-                db[post_id]["content"] = post_params.get(
-                    "content", [db[post_id]["content"]]
-                )[0]
+            content_length = int(self.headers["Content-Length"])
+            post_data = self.rfile.read(content_length)
+            post_params = parse_qs(post_data.decode())
+
+            title = post_params.get("title", [""])[0]
+            content = post_params.get("content", [""])[0]
+
+            if self.blog_service.update_post(post_id, title, content):
                 self.send_response(200)
                 self.send_header("Content-type", "application/json")
                 self.end_headers()
@@ -76,8 +102,7 @@ class BlogHandler(BaseHTTPRequestHandler):
     def do_DELETE(self):
         if self.path.startswith("/post/"):
             post_id = int(self.path.split("/")[-1])
-            if post_id in db:
-                del db[post_id]
+            if self.blog_service.delete_post(post_id):
                 self.send_response(204)
                 self.end_headers()
             else:
@@ -89,7 +114,7 @@ class BlogHandler(BaseHTTPRequestHandler):
 def run_server(server_class=HTTPServer, handler_class=BlogHandler, port=8000):
     server_address = ("", port)
     httpd = server_class(server_address, handler_class)
-    print(f"Starting server on port {port}...")
+    print(f"Iniciando servidor HTTP en puerto {port}...")
     httpd.serve_forever()
 
 

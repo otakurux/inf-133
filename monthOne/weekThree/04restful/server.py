@@ -31,7 +31,6 @@ estudiantes = [
 ]
 
 
-
 class RESTRequestHandler(BaseHTTPRequestHandler):
     def response_handler(self, status, data):    
         self.send_response(status)
@@ -88,8 +87,7 @@ class RESTRequestHandler(BaseHTTPRequestHandler):
             data = json.loads(data.decode("utf-8"))
             id = data["id"]
             estudiante = next(
-                (estudiante for estudiante in estudiantes if estudiante["id"] == id),
-                None,
+                (estudiante for estudiante in estudiantes if estudiante["id"] == id), None,
             )
             if estudiante:
                 estudiante.update(data)
