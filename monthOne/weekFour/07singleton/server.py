@@ -16,7 +16,7 @@ class Player:
     
     def take_damage(self, damage):
         self.health -= damage
-        
+
 class PlayerHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/player":

@@ -2,7 +2,6 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 from urllib.parse import urlparse, parse_qs
 
-
 estudiantes = [
     {
         "id": 1,
@@ -43,7 +42,6 @@ class RESTRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/estudiantes":
             self.response_handler(200, estudiantes)
-            
         elif self.path.startswith("/estudiantes/"):
             id = int(self.path.split("/")[-1])
             estudiante = next(
@@ -52,16 +50,13 @@ class RESTRequestHandler(BaseHTTPRequestHandler):
             )
             if estudiante:
                 self.response_handler(200, estudiante)
-            
         elif self.path == "/carreras":
             carrera = list({estudiante["carrera"] for estudiante in estudiantes})
-
             self.response_handler(200, carrera)
 
         elif self.path == "/Economia":
             estudiantes_economia = [estudiante for estudiante in estudiantes if estudiante["carrera"] == "Economia"]
             self.response_handler(200, estudiantes_economia)
-            
         else:
             self.response_handler(404, {"Error": "Ruta no existente"})
 
@@ -72,12 +67,10 @@ class RESTRequestHandler(BaseHTTPRequestHandler):
             post_data = json.loads(post_data.decode("utf-8"))
             post_data["id"] = len(estudiantes) + 1
             estudiantes.append(post_data)
-            
             self.response_handler(201, estudiantes)
 
         else:
             self.response_handler(201, {"Error": "Ruta no existente"})
-            
 
     def do_PUT(self):
         if self.path.startswith("/estudiantes"):
@@ -100,10 +93,9 @@ class RESTRequestHandler(BaseHTTPRequestHandler):
         if self.path == "/estudiantes":
             estudiantes.clear()
             self.response_handler(201, estudiantes)
-            
         else:
             self.response_handler(201, {"Error": "Ruta no existente"})
-            
+
 def run_server(port=8000):
     try:
         server_address = ("", port)
