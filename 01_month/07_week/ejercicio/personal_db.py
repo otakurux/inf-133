@@ -1,9 +1,10 @@
 import sqlite3
 
 db_filename = "personal.db"
+conn = sqlite3.connect(db_filename)
 
 table_departamentos = """
-    CREATE TABLE DEPARTAMENTOS (
+    CREATE TABLE IF NOT EXISTS DEPARTAMENTOS (
         id INTEGER PRIMARY KEY,
         nombre TEXT NOT NULL,
         fecha_creacion TEXT NOT NULL
@@ -11,7 +12,7 @@ table_departamentos = """
 """
 
 table_cargos = """
-    CREATE TABLE CARGOS (
+    CREATE TABLE IF NOT EXISTS CARGOS (
         id INTEGER PRIMARY KEY,
         nombre TEXT NOT NULL,
         nivel TEXT NOT NULL,
@@ -20,7 +21,7 @@ table_cargos = """
 """
 
 table_empleados = """
-    CREATE TABLE EMPLEADOS (
+    CREATE TABLE IF NOT EXISTS EMPLEADOS (
         id INTEGER PRIMARY KEY,
         nombre TEXT NOT NULL,
         apellido_paterno TEXT NOT NULL,
@@ -34,7 +35,7 @@ table_empleados = """
 """
 
 table_salarios = """
-    CREATE TABLE SALARIO (
+    CREATE TABLE IF NOT EXISTS SALARIO (
         id INTEGER PRIMARY KEY,
         empleado_id INTEGER NOT NULL,
         salario REAL NOT NULL,
@@ -45,12 +46,16 @@ table_salarios = """
     )
 """
 
+tables_to_create = [table_cargos, table_departamentos, table_empleados, table_salarios]
+
 try:
-    with sqlite3.connect(db_filename) as conn:
-        conn.execute(table_departamentos)
-        conn.execute(table_cargos)
-        conn.execute(table_empleados)
-        conn.execute(table_salarios)
-        conn.commit()
+    for table_query in tables_to_create:
+        conn.execute(table_query)
+    conn.commit()
+    print("Exito al crear las tablas:")
+except sqlite3.OperationalError as e:
+    print("Error al crear las tablas:", e)
 except sqlite3.Error as e:
-    print("Error al crear la tabla:", e)
+    print("Error de SQLite:", e)
+finally:
+    conn.close()
