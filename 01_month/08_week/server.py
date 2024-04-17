@@ -64,5 +64,6 @@ def contar():
         )
     return jsonify({"mensaje": contar_vocal(cadena, vocal)})
 
+
 if __name__ == "__main__":
     app.run()
