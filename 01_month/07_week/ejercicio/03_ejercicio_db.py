@@ -55,7 +55,6 @@ try:
     listar_empleados_salarios()
     listar_empleados_departamento_cargo()
     listar_empleados_departamento_cargo_salario()
-
 except sqlite3.Error as e:
     print("Error al ejecutar las consultas:", e)
 finally:

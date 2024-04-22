@@ -26,8 +26,7 @@ try:
     for nombre_cargo, nivel_cargo, fecha_creacion_cargo in new_cargos:
         cursor = conn.execute("SELECT id FROM CARGOS WHERE nombre = ?", (nombre_cargo,))
         if cursor.fetchone() is None:
-            conn.execute("INSERT INTO CARGOS (nombre, nivel, fecha_creacion) VALUES (?, ?, ?)",
-                         (nombre_cargo, nivel_cargo, fecha_creacion_cargo))
+            conn.execute("INSERT INTO CARGOS (nombre, nivel, fecha_creacion) VALUES (?, ?, ?)",(nombre_cargo, nivel_cargo, fecha_creacion_cargo))
         else:
             print(f"El cargo '{nombre_cargo}' ya existe en la base de datos y no se agregara.")
 
