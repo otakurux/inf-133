@@ -1,5 +1,5 @@
 from database import db
-from sqlalchemy import Date
+# from sqlalchemy import Date
 
 class User(db.Model):
     __tablename__ = "users"
@@ -35,6 +35,14 @@ class User(db.Model):
 
     def update(self):
         try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
+
+    def delete(self):
+        try:
+            db.session.delete(self)
             db.session.commit()
         except Exception as e:
             db.session.rollback()

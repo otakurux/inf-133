@@ -18,7 +18,7 @@ def registro():
         password = request.form["password"]
         date_of_birth = request.form.get("date_of_birth")
 
-        user = User(first_name, last_name, email, password, date_of_birth)  # Crea un nuevo usuario con los datos proporcionados
+        user = User(first_name, last_name, email, password, date_of_birth)
         user.save()
         return redirect(url_for("user.usuarios"))
     return user_view.registro()
@@ -47,4 +47,10 @@ def actualizar(id):
     user.date_of_birth = date_of_birth
 
     user.update()
+    return redirect(url_for("user.usuarios"))
+
+@user_bp.route("/users/<int:id>", methods=["DELETE"])
+def eliminar_usuario(id):
+    user = User.query.get_or_404(id)
+    user.delete()
     return redirect(url_for("user.usuarios"))
