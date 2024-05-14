@@ -99,19 +99,19 @@ if __name__ == "__main__":
     nuevo_animal = [create_animal(animal["name"], animal["especie"], animal["age"]) for animal in animals]
     print(nuevo_animal)
 
-    # print("\nObteniendo la lista de animales:")
-    # lista_animales = get_animals()
-    # print(lista_animales)
+    print("\nObteniendo la lista de animales:")
+    lista_animales = get_animals()
+    print(lista_animales)
 
-    # print("\nObteniendo detalles del animal con ID 1:")
-    # animal_detallado = get_animal_details(1)
-    # print(animal_detallado)
+    print("\nObteniendo detalles del animal con ID 1:")
+    animal_detallado = get_animal_details(1)
+    print(animal_detallado)
 
-    # print("\nActualizando el animal con ID 1:")
-    # datos_actualizacion = {"name": "Tigre", "species": "Felino", "age": 4}
-    # animal_actualizado = update_animal(1, **datos_actualizacion)
-    # print(animal_actualizado)
+    print("\nActualizando el animal con ID 1:")
+    datos_actualizacion = {"name": "Tigre", "species": "Felino", "age": 4}
+    animal_actualizado = update_animal(1, **datos_actualizacion)
+    print(animal_actualizado)
 
-    # print("\nEliminando el animal con ID 1:")
-    # mensaje_eliminar = delete_animal(1)
-    # print(mensaje_eliminar)
+    print("\nEliminando el animal con ID 1:")
+    mensaje_eliminar = delete_animal(1)
+    print(mensaje_eliminar)
