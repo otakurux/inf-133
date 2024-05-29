@@ -3,7 +3,6 @@ from flask_login import login_required, current_user
 from models.animal_model import Animal
 from views import animal_view
 
-# Importamos el decorador de roles
 from utils.decorators import role_required
 
 animal_bp = Blueprint("animal", __name__)

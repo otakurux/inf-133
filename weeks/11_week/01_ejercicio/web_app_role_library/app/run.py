@@ -2,15 +2,14 @@ from flask import Flask
 from flask_login import LoginManager
 
 from controllers import user_controller
-
-from controllers import animal_controller
+from controllers import book_controller
 
 from database import db
 from models.user_model import User
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///zoo.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///library.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "clave-secreta"
 
@@ -27,7 +26,7 @@ def load_user(user_id):
 db.init_app(app)
 
 app.register_blueprint(user_controller.user_bp)
-app.register_blueprint(animal_controller.animal_bp)
+app.register_blueprint(book_controller.book_bp)
 
 if __name__ == "__main__":
     with app.app_context():
